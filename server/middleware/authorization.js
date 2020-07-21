@@ -5,9 +5,9 @@ async function author(req, res, next) {
   let { role } = req.data;
   try {
     const product = await Product.findByPk(id);
-    if (!product) next(err);
+    if (!product) throw { status: 400, msg: "Product not found" };
     else if (role == "admin") next();
-    else next(err);
+    else throw { status: 403, msg: "Unauthorized" };
   } catch (err) {
     next(err);
   }

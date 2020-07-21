@@ -8,7 +8,7 @@ function errorHandler(err, req, res, next) {
       return res.status(400).json({ errors: [{ msg: err.message }] });
 
     case "JsonWebTokenError":
-      return res.status(401).json({ msg: "Invalid Token" });
+      return res.status(401).json({ errors: [{ msg: "Invalid Token" }] });
 
     default:
       return res.status(err.status).json({ errors: [{ msg: err.msg }] });

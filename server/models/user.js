@@ -64,6 +64,9 @@ module.exports = (sequelize, DataTypes) => {
       hooks: {
         beforeCreate: (user) => {
           user.password = hash(user.password);
+          if (user.role === "" || user.role == null || user.role == undefined) {
+            user.role = "user";
+          }
         },
       },
       modelName: "User",

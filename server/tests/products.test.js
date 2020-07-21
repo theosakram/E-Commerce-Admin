@@ -2,7 +2,7 @@ const request = require("supertest");
 const app = require("../index");
 const { User } = require("../models");
 const { queryInterface } = require("../models").sequelize;
-const { createToken } = require("../helper/jwt");
+const { createToken, verifyToken } = require("../helper/jwt");
 
 let admin = {
   name: "admin",
@@ -11,11 +11,22 @@ let admin = {
   role: "admin",
 };
 
+let user = {
+  name: "user",
+  email: "user@asdasd.com",
+  password: "something",
+  role: "user",
+};
+
 let access_token = createToken(admin);
-let product_id = null;
+let access_token_user = createToken(user);
+let product_id, product_id_2;
 
 beforeAll((done) => {
-  User.create(admin)
+  User.create(user)
+    .then((_) => {
+      return User.create(admin);
+    })
     .then((_) => {
       done();
     })
@@ -48,6 +59,39 @@ describe("/GET", () => {
 
         expect(res.status).toBe(200);
         expect(res.body).toBeInstanceOf(Array);
+
+        done();
+      });
+  });
+
+  test("should require authentication token", (done) => {
+    request(app)
+      .get("/products")
+      .end((err, res) => {
+        if (err) throw err;
+
+        expect(res.status).toBe(401);
+        expect(res.body).toBeInstanceOf(Object);
+        expect(res.body).toHaveProperty("errors");
+        expect(res.body.errors).toBeInstanceOf(Array);
+        expect(res.body.errors).toContainEqual({ msg: "Invalid Token" });
+
+        done();
+      });
+  });
+
+  test("should require valid token", (done) => {
+    request(app)
+      .get("/products")
+      .set("access_token", "sdfu823023fjsdjkfl23f-923fo23okj")
+      .end((err, res) => {
+        if (err) throw err;
+
+        expect(res.status).toBe(401);
+        expect(res.body).toBeInstanceOf(Object);
+        expect(res.body).toHaveProperty("errors");
+        expect(res.body.errors).toBeInstanceOf(Array);
+        expect(res.body.errors).toContainEqual({ msg: "Invalid Token" });
 
         done();
       });
@@ -201,6 +245,57 @@ describe("/POST", () => {
         done();
       });
   });
+
+  test("should require authentication token", (done) => {
+    let newP = {
+      name: "Nendoroid Catarina Claes",
+      image_url:
+        "https://images.goodsmile.info/cgm/images/product/20200630/9711/71531/large/2873b2fef19273caea217854a9f715ab.jpg",
+      category: "Nendoroid",
+      price: 820000,
+      stock: 7,
+    };
+    request(app)
+      .post("/products")
+      .send(newP)
+      .end((err, res) => {
+        if (err) throw err;
+
+        expect(res.status).toBe(401);
+        expect(res.body).toBeInstanceOf(Object);
+        expect(res.body).toHaveProperty("errors");
+        expect(res.body.errors).toBeInstanceOf(Array);
+        expect(res.body.errors).toContainEqual({ msg: "Invalid Token" });
+
+        done();
+      });
+  });
+
+  test("should require valid token", (done) => {
+    let newP = {
+      name: "Nendoroid Catarina Claes",
+      image_url:
+        "https://images.goodsmile.info/cgm/images/product/20200630/9711/71531/large/2873b2fef19273caea217854a9f715ab.jpg",
+      category: "Nendoroid",
+      price: 820000,
+      stock: 7,
+    };
+    request(app)
+      .post("/products")
+      .send(newP)
+      .set("access_token", "adspfoiu289p3orhwejf0dfhsjldfhsdy423ohjlk")
+      .end((err, res) => {
+        if (err) throw err;
+
+        expect(res.status).toBe(401);
+        expect(res.body).toBeInstanceOf(Object);
+        expect(res.body).toHaveProperty("errors");
+        expect(res.body.errors).toBeInstanceOf(Array);
+        expect(res.body.errors).toContainEqual({ msg: "Invalid Token" });
+
+        done();
+      });
+  });
 });
 
 describe("/PUT", () => {
@@ -231,6 +326,32 @@ describe("/PUT", () => {
         expect(res.body.product).toHaveProperty("category", editP.category);
         expect(res.body.product).toHaveProperty("price", editP.price);
         expect(res.body.product).toHaveProperty("stock", editP.stock);
+
+        done();
+      });
+  });
+
+  test("checking for existing product id", (done) => {
+    let editP = {
+      name: "Nendoroid Ristarte",
+      image_url:
+        "https://goodsmileshop.com/medias/sys_master/images/images/hf3/ha8/9179941273630.jpg",
+      category: "Nendoroid",
+      price: 850000,
+      stock: 6,
+    };
+    request(app)
+      .put(`/products/100`)
+      .set("access_token", access_token)
+      .send(editP)
+      .end((err, res) => {
+        if (err) throw err;
+
+        expect(res.status).toBe(400);
+        expect(res.body).toBeInstanceOf(Object);
+        expect(res.body).toHaveProperty("errors");
+        expect(res.body.errors).toBeInstanceOf(Array);
+        expect(res.body.errors).toContainEqual({ msg: "Product not found" });
 
         done();
       });
@@ -322,17 +443,126 @@ describe("/PUT", () => {
         done();
       });
   });
+
+  test("should require authentication token", (done) => {
+    let editP = {
+      name: "Nendoroid Ristarte",
+      image_url:
+        "https://goodsmileshop.com/medias/sys_master/images/images/hf3/ha8/9179941273630.jpg",
+      category: "Nendoroid",
+      price: 850000,
+      stock: 6,
+    };
+    request(app)
+      .put(`/products/${product_id}`)
+      .send(editP)
+      .end((err, res) => {
+        if (err) throw err;
+
+        expect(res.status).toBe(401);
+        expect(res.body).toBeInstanceOf(Object);
+        expect(res.body).toHaveProperty("errors");
+        expect(res.body.errors).toBeInstanceOf(Array);
+        expect(res.body.errors).toContainEqual({ msg: "Invalid Token" });
+
+        done();
+      });
+  });
+
+  test("should require valid token", (done) => {
+    let editP = {
+      name: "Nendoroid Ristarte",
+      image_url:
+        "https://goodsmileshop.com/medias/sys_master/images/images/hf3/ha8/9179941273630.jpg",
+      category: "Nendoroid",
+      price: 850000,
+      stock: 6,
+    };
+    request(app)
+      .put(`/products/${product_id}`)
+      .send(editP)
+      .set("access_token", "adspfoiu289p3orhwejf0dfhsjldfhsdy423ohjlk")
+      .end((err, res) => {
+        if (err) throw err;
+
+        expect(res.status).toBe(401);
+        expect(res.body).toBeInstanceOf(Object);
+        expect(res.body).toHaveProperty("errors");
+        expect(res.body.errors).toBeInstanceOf(Array);
+        expect(res.body.errors).toContainEqual({ msg: "Invalid Token" });
+
+        done();
+      });
+  });
+
+  test("should require authorization", (done) => {
+    let editP = {
+      name: "Nendoroid Ristarte",
+      image_url:
+        "https://goodsmileshop.com/medias/sys_master/images/images/hf3/ha8/9179941273630.jpg",
+      category: "Nendoroid",
+      price: 850000,
+      stock: 6,
+    };
+    request(app)
+      .put(`/products/${product_id}`)
+      .set("access_token", access_token_user)
+      .send(editP)
+      .end((err, res) => {
+        if (err) throw err;
+
+        expect(res.status).toBe(403);
+        expect(res.body).toBeInstanceOf(Object);
+        expect(res.body).toHaveProperty("errors");
+        expect(res.body.errors).toBeInstanceOf(Array);
+        expect(res.body.errors).toContainEqual({ msg: "Unauthorized" });
+
+        done();
+      });
+  });
 });
 
 describe("/DELETE", () => {
+  test("should require authorization", (done) => {
+    request(app)
+      .delete(`/products/${product_id}`)
+      .set("access_token", access_token_user)
+      .end((err, res) => {
+        if (err) throw err;
+
+        expect(res.status).toBe(403);
+        expect(res.body).toBeInstanceOf(Object);
+        expect(res.body).toHaveProperty("errors");
+        expect(res.body.errors).toBeInstanceOf(Array);
+        expect(res.body.errors).toContainEqual({ msg: "Unauthorized" });
+
+        done();
+      });
+  });
+
+  test("checking for existing product id", (done) => {
+    request(app)
+      .delete(`/products/100`)
+      .set("access_token", access_token)
+      .end((err, res) => {
+        if (err) throw err;
+
+        expect(res.status).toBe(400);
+        expect(res.body).toBeInstanceOf(Object);
+        expect(res.body).toHaveProperty("errors");
+        expect(res.body.errors).toBeInstanceOf(Array);
+        expect(res.body.errors).toContainEqual({ msg: "Product not found" });
+
+        done();
+      });
+  });
+
   test("should return confirmation", (done) => {
     request(app)
       .delete(`/products/${product_id}`)
       .set("access_token", access_token)
       .end((err, res) => {
         if (err) throw err;
-
-        console.log(res.body, "-----------asdasdasd");
 
         expect(res.status).toBe(200);
         expect(res.body.msg).toBe("Product deleted successfully");

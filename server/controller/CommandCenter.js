@@ -33,6 +33,7 @@ class CommandCenter {
             msg: "User logged in successfully",
             access_token,
             name: user.name,
+            id: user.id,
           });
         } else throw { status: 400, msg: "Wrong email/ password" };
       } else throw { status: 400, msg: "User not found" };
@@ -101,7 +102,6 @@ class CommandCenter {
       });
       res.status(200).json({ msg: "Product deleted successfully" });
     } catch (err) {
-      console.log(err, "----------------err");
       next(err);
     }
   }

@@ -1,13 +1,24 @@
 const request = require("supertest");
 const app = require("../index");
+const { User } = require("../models");
 const { queryInterface } = require("../models").sequelize;
 
 const newUser = {
   name: "cyanidewithrice",
-  email: "asdasd@gmail.com",
+  email: "cwr@gmail.com",
   password: "something",
   role: "admin",
 };
+
+beforeAll((done) => {
+  User.create(newUser)
+    .then((_) => {
+      done();
+    })
+    .catch((err) => {
+      done(err);
+    });
+});
 
 afterAll((done) => {
   queryInterface
@@ -22,17 +33,43 @@ afterAll((done) => {
 
 describe("/POST", () => {
   test("should return newly registered user", (done) => {
+    const newUser2 = {
+      name: "pqpqpqp",
+      email: "pqpq@gmail.com",
+      password: "something",
+      role: "user",
+    };
     request(app)
       .post("/users/register")
-      .send(newUser)
+      .send(newUser2)
       .end((err, res) => {
         if (err) throw err;
 
         expect(res.status).toBe(201);
         expect(res.body).toBeInstanceOf(Object);
         expect(res.body.user).toHaveProperty("id", expect.any(Number));
-        expect(res.body.user).toHaveProperty("name", newUser.name);
-        expect(res.body.user).toHaveProperty("email", newUser.email);
+        expect(res.body.user).toHaveProperty("name", newUser2.name);
+        expect(res.body.user).toHaveProperty("email", newUser2.email);
+        expect(res.body.user).toHaveProperty("role", newUser2.role);
+
+        done();
+      });
+  });
+
+  test("login should return access_token", (done) => {
+    request(app)
+      .post("/users/login")
+      .send({
+        email: newUser.email,
+        password: newUser.password,
+      })
+      .end((err, res) => {
+        if (err) throw err;
+
+        expect(res.status).toBe(200);
+        expect(res.body).toBeInstanceOf(Object);
+        expect(res.body).toHaveProperty("name", newUser.name);
+        expect(res.body.access_token).toBeTruthy();
 
         done();
       });
@@ -53,6 +90,29 @@ describe("/POST", () => {
         expect(res.body.errors).toContainEqual({ msg: "Name is required" });
         expect(res.body.errors).toContainEqual({ msg: "Email is required" });
         expect(res.body.errors).toContainEqual({ msg: "Password is required" });
+
+        done();
+      });
+  });
+
+  test("if role is empty when register, automatically become user", (done) => {
+    let noRoleUser = {
+      name: "thick",
+      email: "thick@gmail.com",
+      password: "thicker",
+    };
+    request(app)
+      .post("/users/register")
+      .send(noRoleUser)
+      .end((err, res) => {
+        if (err) throw err;
+
+        expect(res.status).toBe(201);
+        expect(res.body).toBeInstanceOf(Object);
+        expect(res.body.user).toHaveProperty("id", expect.any(Number));
+        expect(res.body.user).toHaveProperty("name", noRoleUser.name);
+        expect(res.body.user).toHaveProperty("email", noRoleUser.email);
+        expect(res.body.user).toHaveProperty("role", "user");
 
         done();
       });
@@ -91,22 +151,6 @@ describe("/POST", () => {
         expect(res.body.errors).toContainEqual({
           msg: "Email is already registered",
         });
-
-        done();
-      });
-  });
-
-  test("login should return access_token", (done) => {
-    request(app)
-      .post("/users/login")
-      .send({ email: newUser.email, password: newUser.password })
-      .end((err, res) => {
-        if (err) throw err;
-
-        expect(res.status).toBe(200);
-        expect(res.body).toBeInstanceOf(Object);
-        expect(res.body).toHaveProperty("name", newUser.name);
-        expect(res.body.access_token).toBeTruthy();
 
         done();
       });
