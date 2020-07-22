@@ -1,52 +1,339 @@
-# title: E-Commerce CMS (Content Management System)
+# E-Commerce CMS
 
-> Buatlah E-Commerce CMS menggunakan Client-server model dengan spesifikasi sebagai berikut: 
+## URL
 
-- API Documentation yang meliputi : URLs, HTTP method, request, response (success dan error case) 
+[Cyanide With Rice](https://kanban-bea73.web.app/)
 
-- Create Product
+## Route-Flows
 
-- Read Product (Menampilkan product)
+### Login
 
-- Update Product
+- **Normal** <br />
 
-- Delete Product
+  - **URL** : `/login`
+  - **Method**: `POST`
+  - **Success Response (at server)** : <br />
 
-- Register(via seed), fitur register tidak perlu (email: admin@mail.com, password:enkrip(‘1234’) ada di file seeder, role:’admin’)
+    - **Code** : `200`
 
-- Login menggunakan email & password 
+    - **Content** :
 
-- Membuat routes sesuai standar REST API CRUD endpoints untuk Product, minimal ada: 
-    - name 
-    - image_url 
-    - price stock 
+      ```javascript
+      {
+        "msg": "User logged in ",
+        "access_token": some random hashed string,
+        "name": "Admin"
+      }
+      ```
 
-- Untuk User, minimal ada :
-    - email
-    - password
-    - role 
+  - **Error Response (at server)** : <br />
 
-- NO alert(); please! 
-- Deploy ke Heroku + Firebase Hosting 
+    - **Code** : `400`
 
-## Rocket 🚀 
-Challenge nya masih kurang? Coba kerjain ini! 
-- Tambahkan content lain seperti banner Tambahkan category untuk products Tambahkan roles untuk users , terserah mau di-implementasikan seperti apa. 
-- Upload image to Cloud Storage (Google Cloud Storage, Amazon S3, etc.) 
+    - **Content** :
 
-## Kompetensi Backend 
-- REST API PostgreSQL + Sequelize 
-- API Documentation 
-- Auth 
-- TDD
+      ```javascript
+      { "msg": "User not found" }
+
+        OR
+
+      {"msg": "Wrong email/ password"}
+      ```
+
+      `OR`
+
+    - **Code** : `500`
+
+    - **Content** :
+
+      ```javascript
+      { "msg": "Internal server error" },
+      ```
+
+### Products
+
+- **Add / Create**<br />
+
+  - URL : `/products`
+  - Method : `POST`
+
+  - **Data Requirement**:
+
+    - name: `string`
+    - image_url: `string`
+    - category: `string`
+    - price: `integer`
+    - stock: `integer`
+
+  - **Headers Requirement**:
+
+    - access_token: `string`
+
+  - **Success Response (at server)** : <br />
+
+    - **Code** : `201`
+    - **Content** :
+
+    ```javascript
+      { "id": 1,
+        "name" :  "Ristarte",
+        "image_url" : "http://ajlskdalksdjalksdjklasjd.xxx",
+        "category" : "Nendoroid",
+        "price" : 875000,
+        "stock" : 3
+       }
+    ```
+
+  - **Error Response (at server)** : <br />
+
+    - **Code** : `401`
+
+    - **Content** :
+
+      ```javascript
+      { "msg": "Invalid Token" }
+      ```
+
+      OR
+
+    - **Code** : `403`
+
+    - **Content** :
+
+      ```javascript
+      { "msg": "Unauthorized" }
+      ```
+
+      OR
+
+    - **Code** : `400`
+
+    - **Content** :
+
+      ```javascript
+      { "msg": "Name is required" }
+
+        OR
+
+      { "msg": "Image URL is required" }
+
+        OR
+
+      { "msg": "You must give your product a price" }
+
+        OR
+
+      { "msg": "Stock is required to sell things" }
+
+        OR
+
+      { "msg": "Name is already taken" }
+
+        OR
+
+      { "msg": "Price must be numbers" }
+
+        OR
+
+      { "msg": "Stock must be numbers" }
+
+        OR
+
+      { "msg": "Price cannot be lesser than one" }
+
+        OR
+
+      { "msg": "Stock cannot be lesser than zero" }
+      ```
+
+      `OR`
+
+    - **Code** : `500`
+
+    - **Content** :
+
+      ```javascript
+      { "msg": "Internal server error" },
+      ```
+
+- **Get product Data** </br>
+
+  - URL : `/produtcs`
+
+    - Method : `GET`
+
+    - **Success Response (at server)** : <br />
+
+      - **Code** : `200`
+      - **Content** :
+
+        ```javascript
+            {
+              "id": 1,
+              "name": "Ristarte",
+              "image_url": "https://images.goodsmile.info/cgm/images/product/20200521/9566/70122/large/9f9596779f8d1e045ee024bae5c0928e.jpg",
+              "category": "Nendoroid",
+              "price": 820000,
+              "stock": 3,
+              "createdAt": "2020-07-22T12:55:41.398Z",
+              "updatedAt": "2020-07-22T12:55:41.398Z"
+            }
+        ```
+
+    - **Error Response (at server)** : <br />
+
+    - **Code** : `401`
+
+      - **Content** :
+
+        ```javascript
+        { "msg": "Invalid Token" },
+        ```
+
+        OR
+
+      - **Code** : `500`
+
+      - **Content** :
+
+        ```javascript
+        { "msg": "Internal server error" },
+        ```
+
+- **Edit** </br>
+
+  - URL : `/products/:id`
+
+    - Method : `PUT`
+
+    - **Data Requirement**
+
+      - name: `string`
+      - image_url: `string`
+      - category: `string`
+      - price: `integer`
+      - stock: `integer`
+
+    - **Success Response (at server)** : <br />
+
+      - **Code** : `200`
+      - **Content** :
+
+      ```javascript
+        {
+          "id": 1,
+              "name": "Edited name",
+              "image_url": "https://images.goodsmile.info/cgm/images/product/20200521/9566/70122/large/9f9596779f8d1e045ee024bae5c0928e.jpg",
+              "category": "Asdjaklsdjkl",
+              "price": 1,
+              "stock": 2,
+              "createdAt": "2020-07-22T12:55:41.398Z",
+              "updatedAt": "2020-07-22T12:55:41.398Z"
+         }
+      ```
+
+  - **Error Response (at server)** : <br />
+
+    - **Code** : `401`
+
+    - **Content** :
+
+      ```javascript
+        { "msg": "Invalid Token" }
+      ```
+
+      OR
+
+    - **Code** : `400`
+
+    - **Content** :
+
+      ```javascript
+      { "msg": "Name is required" }
+
+      OR
+
+      { "msg": "Image URL is required" }
+
+      OR
+
+      { "msg": "You must give your product a price" }
+
+      OR
+
+      { "msg": "Stock is required to sell things" }
+
+      OR
+
+      { "msg": "Name is already taken" }
+
+      OR
+
+      { "msg": "Price must be numbers" }
+
+      OR
+
+      { "msg": "Stock must be numbers" }
+
+      OR
+
+      { "msg": "Price cannot be lesser than one" }
+
+      OR
+
+      { "msg": "Stock cannot be lesser than zero" }
+      ```
+
+      `OR`
+
+    - **Code** : `500`
+
+    - **Content** :
+
+      ```javascript
+      { "msg": "Internal server error" },
+      ```
+
+- **Delete** </br>
+
+  - URL : `/products/:id`
+
+    - Method : `DELETE`
+
+    - **Success Response (at server)** : <br />
+
+      - **Code** : `200`
+      - **Content** :
+
+      ```javascript
+        { "msg": "Product deleted successfully" }
+      ```
+
+    - **Error Response (at server)** : <br />
 
 
-## Kompetensi Client 
-- Vue.js SPA (Single Page Application) Vue CLI, Vue Router, Vuex 
+      - **Code** : `403`
 
-## Deadline 
-> Week 3 - Sabtu 18:00 
+      - **Content** :
 
-## Submission 
-- Fork dari organization, lalu open pull request dengan title NAMA LENGKAP KAMU (ex: Dimitri Wahyudiputra) dan assign ke buddy kamu (kalau bisa di awal berhubung kita online). 
-- Tambahkan comment atau deksripsi PR yang berisi environment variables yang dipakai (beserta valuenya), link deploy, fitur tambahannya apa dan kendala saat mengerjakan. 
+        ```javascript
+        { "msg": "Unauthorized" }
+        ```
+        OR
+
+      - **Code** : `400`
+
+      - **Content** :
+
+        ```javascript
+        { "msg": "Product not found" }
+        ```
+        OR
+
+      - **Code** : `500`
+
+      - **Content** :
+
+        ```javascript
+        { "msg": "Internal server error" },
+        ```
