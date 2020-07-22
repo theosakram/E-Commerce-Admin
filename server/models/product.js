@@ -36,6 +36,10 @@ module.exports = (sequelize, DataTypes) => {
             args: true,
             msg: "Image URL is required",
           },
+          isUrl: {
+            args: true,
+            msg: "Needs to be a URL",
+          },
           notNull: true,
         },
       },

@@ -1,12 +1,13 @@
 <template>
   <section class="hero is-fullheight">
+    <Navbar></Navbar>
     <div class="hero-body">
       <div class="container">
         <div class="section">
-          <div class="container grid-2">
+          <div class="container grid-4">
             <div class="columns">
               <div class="column">
-                <div class="notification">
+                <div class="notification ">
                   <h1 class="subtitle">Login</h1>
                   <div class="field">
                     <p class="control has-icons-left has-icons-right">
@@ -41,21 +42,14 @@
                     <div class="columns">
                       <div class="column grid">
                         <p class="control">
-                          <button
-                            class="button hero-section-backg"
+                          <router-link
+                            to="/dashboard"
+                            class="button has-text-white background"
                             @click.prevent="login()"
                           >
                             Login
-                          </button>
+                          </router-link>
                         </p>
-                      </div>
-                      <div class="column">
-                        <button
-                          v-google-signin-button="clientId"
-                          class="google-signin-button"
-                        >
-                          Continue with Google
-                        </button>
                       </div>
                     </div>
                   </div>
@@ -68,3 +62,12 @@
     </div>
   </section>
 </template>
+
+<script>
+import Navbar from "../components/Navbar";
+export default {
+  components: {
+    Navbar,
+  },
+};
+</script>

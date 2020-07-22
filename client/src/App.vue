@@ -1,24 +1,15 @@
 <template>
-  <div id="app">
-    <Navbar id="nav"></Navbar>
-    <!-- <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/login">Login</router-link> |
-      <router-link to="/register">Register</router-link> |
-      <router-link to="/landingPage">Landing Page</router-link> -->
+  <div id="app" class="background is-family-code">
     <router-view />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Navbar from "@/components/Navbar.vue";
 
 export default {
   name: "App",
-  components: {
-    Navbar,
-  },
+  components: {},
 };
 </script>
 
@@ -45,7 +36,11 @@ export default {
 }
 
 .background {
-  background: #353335;
+  background: #702632;
+}
+
+.text-color {
+  color: #702632;
 }
 
 .backg-header {
@@ -53,11 +48,11 @@ export default {
 }
 
 .header-text-color {
-  color: #729f7f;
+  color: #3298dc;
 }
 
 .hero-section-backg {
-  background: #7baf9f;
+  background: #3298dc;
 }
 
 .hero-section-backg-2 {
@@ -80,7 +75,7 @@ export default {
 }
 
 .grid * {
-  grid-column: 1/3;
+  grid-column: 1/2;
 }
 
 .grid-2 {
@@ -89,12 +84,21 @@ export default {
 }
 
 .grid-2 * {
-  grid-column: 2/3;
+  grid-column: 1/3;
 }
 
 .grid-3 {
   display: grid;
   grid-template-columns: 1fr;
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.grid-4 * {
+  grid-column: 2/3;
 }
 
 .google-signin-button {
@@ -105,5 +109,13 @@ export default {
   border-radius: 10px;
   padding: 10px 20px 25px 20px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.navbar-item.has-text-white:hover {
+  color: #702632 !important;
+}
+
+.this-hover.has-text-white:hover {
+  color: #702632 !important;
 }
 </style>

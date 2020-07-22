@@ -1,23 +1,18 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
-import About from "../views/About.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
-import LandingPage from "../views/LandinPage.vue";
+import LandingPage from "../views/LandingPage.vue";
+import Dashboard from "../views/Dashboard.vue";
+import Add from "../views/AddProduct.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
-  },
-  {
-    path: "/about",
-    name: "About",
-    component: About,
+    name: "LandingPage",
+    component: LandingPage,
   },
   {
     path: "/login",
@@ -30,9 +25,14 @@ const routes = [
     component: Register,
   },
   {
-    path: "/landingPage",
-    name: "Landing Page",
-    component: LandingPage,
+    path: "/dashboard",
+    name: "Dashboard",
+    component: Dashboard,
+  },
+  {
+    path: "/add",
+    name: "AddProduct",
+    component: Add,
   },
 ];
 
