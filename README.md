@@ -2,7 +2,7 @@
 
 ## URL
 
-[Cyanide With Rice](https://kanban-bea73.web.app/)
+[Cyanide With Rice](https://e-cms-f14a6.web.app/)
 
 ## Route-Flows
 
