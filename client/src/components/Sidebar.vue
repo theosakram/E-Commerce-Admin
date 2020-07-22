@@ -1,5 +1,5 @@
 <template>
-  <div class="column">
+  <div class="column is-one-fifth">
     <aside class="menu">
       <p class="menu-label has-text-white">
         Product
@@ -15,14 +15,14 @@
         Category
       </p>
       <ul class="menu-list has-text-white">
-        <li>
-          <a class="this-hover has-text-white"> Figma</a>
-        </li>
-        <li>
-          <a href="#" class="this-hover has-text-white"> Funko </a>
-        </li>
-        <li>
-          <a href="#" class="this-hover has-text-white"> Nendoroid </a>
+        <li v-for="(category, index) in allCategory" :key="index">
+          <router-link
+            :to="'/dashboard/' + category"
+            class="this-hover has-text-white"
+            v-bind:class="{ 'is-active': category === catNow }"
+          >
+            {{ category }}
+          </router-link>
         </li>
       </ul>
       <p class="menu-label has-text-white">
@@ -30,8 +30,8 @@
       </p>
       <ul class="menu-list">
         <li>
-          <router-link to="/" class="this-hover has-text-white"
-            >Logout</router-link
+          <a class="this-hover has-text-white" @click.prevent="logout()"
+            >Logout</a
           >
         </li>
       </ul>
@@ -40,7 +40,17 @@
 </template>
 
 <script>
-export default {};
+import { mapGetters } from "vuex";
+export default {
+  props: ["catNow"],
+  computed: mapGetters(["allCategory"]),
+  methods: {
+    logout() {
+      localStorage.clear();
+      this.$router.push("/");
+    },
+  },
+};
 </script>
 
 <style></style>

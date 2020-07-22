@@ -1,18 +1,21 @@
 "use strict";
+const { hash } = require("../helper/bcrypt");
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: (queryInterface, Sequelize) => {
     let admin = {
       name: "Admin",
       email: "admin@admin.admin",
-      password: "admin",
+      password: hash("admin"),
       role: "admin",
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
 
-    await queryInterface.bulkInsert("Users", admin, {});
+    return queryInterface.bulkInsert("Users", [admin], {});
   },
 
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete("Users", null, {});
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.bulkDelete("Users", null, {});
   },
 };

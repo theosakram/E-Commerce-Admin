@@ -7,15 +7,10 @@
             <div class="columns">
               <div class="column">
                 <div class="notification ">
-                  <h1 class="subtitle">Add Product</h1>
+                  <h1 class="subtitle">Edit Product</h1>
                   <div class="field">
                     <p class="control has-icons-left has-icons-right">
-                      <input
-                        class="input"
-                        type="text"
-                        placeholder="Name"
-                        v-model="name"
-                      />
+                      <input class="input" type="text" v-model="name" />
                       <span class="icon is-small is-left">
                         <i class="fas fa-envelope"></i>
                       </span>
@@ -83,9 +78,9 @@
                         <p class="control">
                           <button
                             class="button has-text-white background"
-                            @click.prevent="addProduct()"
+                            @click.prevent="editProduct()"
                           >
-                            Add
+                            Edit
                           </button>
                         </p>
                       </div>
@@ -104,19 +99,22 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
+  props: ["product"],
   data() {
     return {
-      name: "",
-      image_url: "",
-      category: "",
-      price: 0,
-      stock: 0,
+      id: `${this.$route.params.id}`,
+      name: `${this.$route.params.name}`,
+      image_url: `${this.$route.params.image_url}`,
+      category: `${this.$route.params.category}`,
+      price: `${this.$route.params.price}`,
+      stock: `${this.$route.params.stock}`,
     };
   },
   methods: {
-    addProduct() {
+    editProduct() {
       this.$store
-        .dispatch("AddProduct", {
+        .dispatch("editProduct", {
+          id: this.id,
           name: this.name,
           image_url: this.image_url,
           category: this.category,

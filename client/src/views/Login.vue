@@ -7,7 +7,7 @@
           <div class="container grid-4">
             <div class="columns">
               <div class="column">
-                <div class="notification ">
+                <div class="notification">
                   <h1 class="subtitle">Login</h1>
                   <div class="field">
                     <p class="control has-icons-left has-icons-right">
@@ -42,13 +42,12 @@
                     <div class="columns">
                       <div class="column grid">
                         <p class="control">
-                          <router-link
+                          <a
                             to="/dashboard"
                             class="button has-text-white background"
                             @click.prevent="login()"
+                            >Login</a
                           >
-                            Login
-                          </router-link>
                         </p>
                       </div>
                     </div>
@@ -68,6 +67,31 @@ import Navbar from "../components/Navbar";
 export default {
   components: {
     Navbar,
+  },
+  data() {
+    return {
+      email: "",
+      password: "",
+    };
+  },
+  methods: {
+    login() {
+      this.$store
+        .dispatch("Login", {
+          email: this.email,
+          password: this.password,
+        })
+        .then((data) => {
+          this.$router.push("/dashboard");
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: err.response.statusText,
+          });
+        });
+    },
   },
 };
 </script>

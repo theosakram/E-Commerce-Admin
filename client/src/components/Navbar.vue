@@ -17,9 +17,6 @@
             <router-link to="/login" class="navbar-item has-text-white">
               Login
             </router-link>
-            <router-link to="/register" class="navbar-item has-text-white">
-              Register
-            </router-link>
             <a
               href="https://github.com/theosakram/Ecommerce-CMS"
               class="navbar-item has-text-white"
@@ -27,17 +24,6 @@
             >
               Documentation
             </a>
-            <span class="navbar-item">
-              <button
-                class="button is-inverted text-color"
-                v-google-signin-button="clientId"
-              >
-                <span class="icon">
-                  <i class="fab fa-google" aria-hidden="true"></i>
-                </span>
-                <span>Sign In</span>
-              </button>
-            </span>
           </div>
         </div>
       </div>

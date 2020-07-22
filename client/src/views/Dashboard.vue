@@ -2,39 +2,33 @@
   <section class="hero is-fullheight">
     <div class="hero-body">
       <div class="container">
-        <Breadcrumb></Breadcrumb>
-        <section class="section">
-          <div class="columns" style="overflow: auto;">
-            <Sidebar class="grid"></Sidebar>
-            <Category
-              class="grid-2"
-              v-for="(category, index) in categories"
-              :key="index"
-              :category="category"
-            ></Category>
-          </div>
-        </section>
+        <div class="columns" style="overflow: auto;">
+          <BigCard
+            v-for="(category, index) in allCategory"
+            :key="index"
+            :category="category"
+            class="garmin"
+          ></BigCard>
+        </div>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-import Sidebar from "@/components/Sidebar.vue";
-import Breadcrumb from "@/components/Breadcrumb.vue";
-import Category from "@/components/Category.vue";
+import { mapGetters } from "vuex";
+import BigCard from "../components/BigCard";
+
 export default {
-  data() {
-    return {
-      categories: ["Figma", "Funko", "Nendoroid"],
-    };
-  },
+  computed: mapGetters(["allCategory"]),
   components: {
-    Sidebar,
-    Breadcrumb,
-    Category,
+    BigCard,
   },
 };
 </script>
 
-<style></style>
+<style>
+.garmin {
+  margin-right: 15px;
+}
+</style>
