@@ -1,18 +1,4 @@
 {
-  "development": {
-    "username": "theosakram",
-    "password": "pgpw",
-    "database": "E-CMS_development",
-    "host": "localhost",
-    "dialect": "postgres"
-  },
-  "test": {
-    "username": "theosakram",
-    "password": "pgpw",
-    "database": "E-CMS_test",
-    "host": "localhost",
-    "dialect": "postgres"
-  },
   "production": {
     "username": "asyzdyqzbkqqsf",
     "password": "14cdd3a36d38f5e5258f0d2dc40b37fa9d8aaffc59ef05fe2d1499a8d9e320a6",
