@@ -29,6 +29,13 @@ export default {
     Breadcrumb,
     Category,
   },
+  created() {
+    if (this.$route.path !== "/") {
+      if (!localStorage.access_token) {
+        this.$router.push("/login");
+      }
+    }
+  },
 };
 </script>
 
