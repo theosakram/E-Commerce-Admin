@@ -43,7 +43,9 @@
             <router-link
               :to="'/dashboard/' + category"
               class="title is-4 has-text-black"
-              >{{ category }}</router-link
+              ><button class="button is-info is-outlined">
+                {{ category }}
+              </button></router-link
             >
           </div>
         </div>
