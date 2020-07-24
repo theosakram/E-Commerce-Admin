@@ -1,13 +1,9 @@
 <template>
-  <div class="column is-one-third " v-if="product.category === category">
+  <div class="column is-one-third" v-if="product.category === category">
     <div class="card bottom">
       <div class="card-image">
-        <figure class="image is-4by4">
-          <img
-            :src="product.image_url"
-            :alt="product.name"
-            class="image is-256x256"
-          />
+        <figure>
+          <img :src="product.image_url" :alt="product.name" class="image" />
         </figure>
       </div>
       <div class="card-content">
@@ -150,8 +146,26 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .bottom {
   margin-bottom: 10px;
+}
+
+.image {
+  width: 100%;
+  height: 65vh !important;
+  object-fit: cover;
+}
+
+.card-image {
+  height: 65vh !important;
+}
+
+.card {
+  height: 100vh !important;
+}
+
+.card-content {
+  height: 25vh;
 }
 </style>
