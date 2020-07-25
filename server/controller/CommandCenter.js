@@ -1,4 +1,4 @@
-const { Product, User } = require("../models");
+const { Category, Product, User } = require("../models");
 const { compare } = require("../helper/bcrypt");
 const { createToken } = require("../helper/jwt");
 
@@ -42,6 +42,61 @@ class CommandCenter {
     }
   }
 
+  //CATEGORY
+
+  static async getCategory(req, res, next) {
+    try {
+      const category = await Category.findAll();
+      res.status(200).json(category);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async addCategory(req, res, next) {
+    let { name } = req.body;
+    try {
+      const category = await Category.create({ name });
+      res.status(201).json(category);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async editCategory(req, res, next) {
+    let { id } = req.params;
+    let { name } = req.body;
+    try {
+      let newCategory = {
+        name,
+      };
+      const updating = await Category.update(newCategory, {
+        where: {
+          id,
+        },
+      });
+
+      const category = await Category.findByPk(id);
+      res.status(200).json({ category, msg: "Category edited successfully" });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async deleteCategory(req, res, next) {
+    let { id } = req.params;
+    try {
+      const category = await Category.destroy({
+        where: {
+          id,
+        },
+      });
+      res.status(200).json({ msg: "Category deleted successfully" });
+    } catch (err) {
+      next(err);
+    }
+  }
+
   //PRODUCTS
   static async getProduct(req, res, next) {
     try {
@@ -52,13 +107,27 @@ class CommandCenter {
     }
   }
 
+  static async getProductByCategory(req, res, next) {
+    let { id } = req.params;
+    try {
+      const product = await Product.findAll({
+        where: {
+          category_id: id,
+        },
+      });
+      res.status(200).json(product);
+    } catch (err) {
+      next(err);
+    }
+  }
+
   static async addProduct(req, res, next) {
     try {
-      let { name, image_url, category, price, stock } = req.body;
+      let { name, image_url, category_id, price, stock } = req.body;
       const product = await Product.create({
         name,
         image_url,
-        category,
+        category_id,
         price,
         stock,
       });

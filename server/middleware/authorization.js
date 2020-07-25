@@ -1,6 +1,6 @@
-const { Product } = require("../models");
+const { Category, Product } = require("../models");
 
-async function author(req, res, next) {
+async function authorProduct(req, res, next) {
   let { id } = req.params;
   let { role } = req.data;
   try {
@@ -13,4 +13,17 @@ async function author(req, res, next) {
   }
 }
 
-module.exports = author;
+async function authorCategory(req, res, next) {
+  let { id } = req.params;
+  let { role } = req.data;
+  try {
+    const category = await Category.findByPk(id);
+    if (!category) throw { status: 400, msg: "Category not found" };
+    else if (role == "admin") next();
+    else throw { status: 403, msg: "Unauthorized" };
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { authorProduct, authorCategory };

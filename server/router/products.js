@@ -1,10 +1,11 @@
 const route = require("express").Router();
 const CommandCenter = require("../controller/CommandCenter.js");
-const author = require("../middleware/authorization");
+const { authorProduct } = require("../middleware/authorization");
 
 route.get("/", CommandCenter.getProduct);
+route.get("/:id", CommandCenter.getProductByCategory);
 route.post("/", CommandCenter.addProduct);
-route.put("/:id", author, CommandCenter.editProduct);
-route.delete("/:id", author, CommandCenter.deleteProduct);
+route.put("/:id", authorProduct, CommandCenter.editProduct);
+route.delete("/:id", authorProduct, CommandCenter.deleteProduct);
 
 module.exports = route;

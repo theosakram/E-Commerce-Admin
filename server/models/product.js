@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Product.belongsTo(models.Category, { foreignKey: "category_id" });
     }
   }
   Product.init(
@@ -39,17 +39,6 @@ module.exports = (sequelize, DataTypes) => {
           isUrl: {
             args: true,
             msg: "Needs to be a URL",
-          },
-          notNull: true,
-        },
-      },
-      category: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            args: true,
-            msg: "Category is required",
           },
           notNull: true,
         },
@@ -87,6 +76,17 @@ module.exports = (sequelize, DataTypes) => {
           isGreaterThanZero(value) {
             if (value < 0) throw new Error("Stock cannot be lesser than zero");
           },
+        },
+      },
+      category_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            args: true,
+            msg: "Which category this product belongs to?",
+          },
+          notNull: true,
         },
       },
     },
