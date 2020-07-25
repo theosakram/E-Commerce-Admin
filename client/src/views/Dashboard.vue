@@ -4,11 +4,16 @@
       <div class="container">
         <div class="columns" style="overflow: auto;">
           <BigCard
-            v-for="(category, index) in allCategory"
-            :key="index"
+            v-for="category in allCategories"
+            :key="category.id"
             :category="category"
             class="garmin"
           ></BigCard>
+          <button class="button is-danger is-outlined">
+            <router-link to="/addCategory" class="this-hover has-text-white"
+              >Add Category</router-link
+            >
+          </button>
         </div>
       </div>
     </div>
@@ -16,13 +21,16 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import BigCard from "../components/BigCard";
 
 export default {
-  computed: mapGetters(["allCategory"]),
+  computed: mapGetters(["allCategories"]),
   components: {
     BigCard,
+  },
+  methods: {
+    ...mapActions(["fetchCategories"]),
   },
   created() {
     if (this.$route.path !== "/") {
@@ -30,6 +38,8 @@ export default {
         this.$router.push("/login");
       }
     }
+
+    this.fetchCategories();
   },
 };
 </script>

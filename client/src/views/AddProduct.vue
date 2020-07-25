@@ -17,7 +17,7 @@
                         v-model="name"
                       />
                       <span class="icon is-small is-left">
-                        <i class="fas fa-envelope"></i>
+                        <i class="fas fa-user"></i>
                       </span>
                       <span class="icon is-small is-right">
                         <i class="fas fa-check"></i>
@@ -40,12 +40,12 @@
                   <div class="field">
                     <div class="control">
                       <div class="select is-icon">
-                        <select v-model="category">
+                        <select v-model="category_id">
                           <option
-                            v-for="(x, index) in allCategory"
-                            :key="index"
+                            v-for="category in allCategories"
+                            :key="category.id"
                           >
-                            {{ x }}
+                            {{ category.id }}. {{ category.name }}
                           </option>
                         </select>
                       </div>
@@ -108,7 +108,7 @@ export default {
     return {
       name: "",
       image_url: "",
-      category: "",
+      category_id: "",
       price: 0,
       stock: 0,
     };
@@ -119,12 +119,12 @@ export default {
         .dispatch("AddProduct", {
           name: this.name,
           image_url: this.image_url,
-          category: this.category,
+          category_id: +this.category_id[0],
           price: this.price,
           stock: this.stock,
         })
         .then((data) => {
-          this.$router.push(`/dashboard/${this.category}`);
+          this.$router.push(`/category/${this.category_id.substring(3)}`);
         })
         .catch((err) => {
           Swal.fire({
@@ -135,7 +135,7 @@ export default {
         });
     },
   },
-  computed: mapGetters(["allCategory"]),
+  computed: mapGetters(["allCategories"]),
   created() {
     if (this.$route.path !== "/") {
       if (!localStorage.access_token) {

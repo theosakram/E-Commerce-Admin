@@ -100,7 +100,13 @@ class CommandCenter {
   //PRODUCTS
   static async getProduct(req, res, next) {
     try {
-      const product = await Product.findAll();
+      const product = await Product.findAll({
+        include: [
+          {
+            model: Category,
+          },
+        ],
+      });
       res.status(200).json(product);
     } catch (err) {
       next(err);
@@ -108,13 +114,25 @@ class CommandCenter {
   }
 
   static async getProductByCategory(req, res, next) {
-    let { id } = req.params;
+    let { name } = req.params;
     try {
-      const product = await Product.findAll({
+      const category = await Category.findOne({
         where: {
-          category_id: id,
+          name,
         },
       });
+
+      const product = await Product.findAll({
+        where: {
+          category_id: category.id,
+        },
+        include: [
+          {
+            model: Category,
+          },
+        ],
+      });
+
       res.status(200).json(product);
     } catch (err) {
       next(err);

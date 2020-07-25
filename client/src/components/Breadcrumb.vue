@@ -13,7 +13,7 @@
         <a href="#" class="has-text-white"> Dashboard</a>
       </li>
       <li>
-        <a href="#" class="has-text-white"> {{ category }} </a>
+        <a href="#" class="has-text-white"> {{ newCategory }} </a>
       </li>
     </ul>
   </nav>
@@ -21,11 +21,16 @@
 
 <script>
 export default {
-  props: ["category"],
   data() {
     return {
       name: localStorage.name,
+      category: this.$route.params.category,
     };
+  },
+  computed: {
+    newCategory() {
+      return this.$route.params.category;
+    },
   },
 };
 </script>

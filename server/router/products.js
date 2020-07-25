@@ -3,7 +3,7 @@ const CommandCenter = require("../controller/CommandCenter.js");
 const { authorProduct } = require("../middleware/authorization");
 
 route.get("/", CommandCenter.getProduct);
-route.get("/:id", CommandCenter.getProductByCategory);
+route.get("/search/:name", CommandCenter.getProductByCategory);
 route.post("/", CommandCenter.addProduct);
 route.put("/:id", authorProduct, CommandCenter.editProduct);
 route.delete("/:id", authorProduct, CommandCenter.deleteProduct);

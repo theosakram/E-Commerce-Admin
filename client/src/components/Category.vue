@@ -2,7 +2,7 @@
   <div class="column">
     <div class="notification">
       <h1 class="subtitle">
-        {{ category }}
+        {{ newCategory }}
       </h1>
       <div class="columns is-multiline">
         <Card
@@ -18,7 +18,7 @@
 
 <script>
 import Card from "@/components/Card.vue";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 export default {
   props: ["category"],
   components: {
@@ -26,13 +26,22 @@ export default {
   },
   data() {
     return {
-      newCategory: this.category,
+      catNow: this.newCategory,
     };
   },
   methods: {
     ...mapActions(["fetchProducts"]),
   },
-  computed: mapGetters(["allProducts"]),
+  computed: {
+    ...mapGetters(["allProducts"]),
+    newCategory() {
+      return this.$route.params.category;
+    },
+    ...mapState(["tempId"]),
+    newId() {
+      return this.$route.params.id;
+    },
+  },
   created() {
     this.fetchProducts();
   },

@@ -1,5 +1,5 @@
 <template>
-  <div class="column is-one-third" v-if="product.category === category">
+  <div class="column is-one-third" v-if="product.Category.name === category">
     <div class="card bottom">
       <div class="card-image">
         <figure>
@@ -79,7 +79,7 @@ export default {
       }).then((result) => {
         if (result.value) {
           Axios({
-            url: `https://e-cms-wyrdhn.herokuapp.com/products/${id}`,
+            url: `http://localhost:3000/products/${id}`,
             method: "put",
             data: {
               stock: +result.value + +pStock,
@@ -106,7 +106,7 @@ export default {
     },
     buyProduct(id, pStock) {
       Axios({
-        url: `https://e-cms-wyrdhn.herokuapp.com/products/${id}`,
+        url: `http://localhost:3000/products/${id}`,
         method: "put",
         data: {
           stock: +pStock - 1,
@@ -136,7 +136,7 @@ export default {
           id: `${this.product.id}`,
           name: `${this.product.name}`,
           image_url: `${this.product.image_url}`,
-          category: `${this.product.category}`,
+          category_id: `${this.product.category_id}. ${this.product.name}`,
           price: `${this.product.price}`,
           stock: `${this.product.stock}`,
         },

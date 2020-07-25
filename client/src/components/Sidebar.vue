@@ -15,14 +15,20 @@
         Category
       </p>
       <ul class="menu-list has-text-white">
-        <li v-for="(category, index) in allCategory" :key="index">
+        <li v-for="category in allCategories" :key="category.id">
           <router-link
-            :to="'/dashboard/' + category"
+            :to="`/category/${category.name}`"
             class="this-hover has-text-white"
-            v-bind:class="{ 'is-active': category === catNow }"
+            :class="{ 'is-active': category.name === catNow }"
           >
-            {{ category }}
+            {{ category.name }}
           </router-link>
+        </li>
+
+        <li>
+          <router-link to="/addCategory" class="this-hover has-text-white"
+            >Add Category</router-link
+          >
         </li>
       </ul>
       <p class="menu-label has-text-white">
@@ -40,15 +46,37 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   props: ["catNow"],
-  computed: mapGetters(["allCategory"]),
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapGetters(["allCategories"]),
+    newCategory() {
+      return this.$route.params.category;
+    },
+  },
   methods: {
     logout() {
       localStorage.clear();
       this.$router.push("/");
     },
+    ...mapActions(["fetchCategories"]),
+    changePage() {
+      this.$router.push({
+        name: "Category",
+        params: {
+          id: `${this.category.id}`,
+          name: `${this.category.name}`,
+          category: `${this.category.name}`,
+        },
+      });
+    },
+  },
+  created() {
+    this.fetchCategories(this.newCategory);
   },
 };
 </script>

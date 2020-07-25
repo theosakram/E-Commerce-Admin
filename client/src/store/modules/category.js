@@ -1,12 +1,52 @@
-// import Axios from "axios";
+import Axios from "axios";
 
 const state = {
-  category: ["Figma", "Funko", "Nendoroid", "PPP"],
+  categories: [],
 };
-const mutations = {};
-const actions = {};
+const mutations = {
+  setCategories: (state, categories) => (state.categories = categories),
+};
+const actions = {
+  fetchCategories: ({ commit }) => {
+    return new Promise((resolve, reject) => {
+      Axios({
+        url: "http://localhost:3000/categories",
+        method: "get",
+        headers: {
+          access_token: localStorage.access_token,
+        },
+      })
+        .then((data) => {
+          commit("setCategories", data.data);
+          resolve(true);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  AddCategory: ({ commit }, payload) => {
+    return new Promise((resolve, reject) => {
+      Axios({
+        url: "http://localhost:3000/categories",
+        method: "post",
+        data: payload,
+        headers: {
+          access_token: localStorage.access_token,
+        },
+      })
+        .then((data) => {
+          resolve(true);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+};
 const getters = {
-  allCategory: (state) => state.category,
+  allCategories: (state) => state.categories,
 };
 
 export default {

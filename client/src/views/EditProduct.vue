@@ -35,12 +35,12 @@
                   <div class="field">
                     <div class="control">
                       <div class="select is-icon">
-                        <select v-model="category">
+                        <select v-model="category_id">
                           <option
-                            v-for="(x, index) in allCategory"
-                            :key="index"
+                            v-for="category in allCategories"
+                            :key="category.id"
                           >
-                            {{ x }}
+                            {{ category.id }}. {{ category.name }}
                           </option>
                         </select>
                       </div>
@@ -105,7 +105,7 @@ export default {
       id: `${this.$route.params.id}`,
       name: `${this.$route.params.name}`,
       image_url: `${this.$route.params.image_url}`,
-      category: `${this.$route.params.category}`,
+      category_id: `${this.$route.params.category_id}`,
       price: `${this.$route.params.price}`,
       stock: `${this.$route.params.stock}`,
     };
@@ -117,12 +117,12 @@ export default {
           id: this.id,
           name: this.name,
           image_url: this.image_url,
-          category: this.category,
+          category_id: +this.category_id[0],
           price: this.price,
           stock: this.stock,
         })
         .then((data) => {
-          this.$router.push(`/dashboard/${this.category}`);
+          this.$router.push(`/category/${this.category_id.substring(3)}`);
         })
         .catch((err) => {
           Swal.fire({
@@ -133,7 +133,7 @@ export default {
         });
     },
   },
-  computed: mapGetters(["allCategory"]),
+  computed: mapGetters(["allCategories"]),
   created() {
     if (this.$route.path !== "/") {
       if (!localStorage.access_token) {
