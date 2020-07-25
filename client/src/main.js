@@ -5,7 +5,7 @@ import store from "./store";
 import Axios from "axios";
 
 Vue.config.productionTip = false;
-Axios.defaults.baseURL = "http://localhost:3000";
+Axios.defaults.baseURL = "https://e-cms-wyrdhn.herokuapp.com";
 
 new Vue({
   router,

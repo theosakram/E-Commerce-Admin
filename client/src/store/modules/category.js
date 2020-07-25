@@ -10,7 +10,7 @@ const actions = {
   fetchCategories: ({ commit }) => {
     return new Promise((resolve, reject) => {
       Axios({
-        url: "http://localhost:3000/categories",
+        url: "https://e-cms-wyrdhn.herokuapp.com/categories",
         method: "get",
         headers: {
           access_token: localStorage.access_token,
@@ -29,7 +29,7 @@ const actions = {
   AddCategory: ({ commit }, payload) => {
     return new Promise((resolve, reject) => {
       Axios({
-        url: "http://localhost:3000/categories",
+        url: "https://e-cms-wyrdhn.herokuapp.com/categories",
         method: "post",
         data: payload,
         headers: {
