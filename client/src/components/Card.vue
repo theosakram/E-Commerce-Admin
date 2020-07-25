@@ -79,7 +79,7 @@ export default {
       }).then((result) => {
         if (result.value) {
           Axios({
-            url: `https://e-cms-wyrdhn.herokuapp.com/products/${id}`,
+            url: `http://localhost:3000/products/${id}`,
             method: "put",
             data: {
               stock: +result.value + +pStock,
@@ -106,7 +106,7 @@ export default {
     },
     buyProduct(id, pStock) {
       Axios({
-        url: `https://e-cms-wyrdhn.herokuapp.com/products/${id}`,
+        url: `http://localhost:3000/products/${id}`,
         method: "put",
         data: {
           stock: +pStock - 1,

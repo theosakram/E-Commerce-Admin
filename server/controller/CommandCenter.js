@@ -64,34 +64,42 @@ class CommandCenter {
   }
 
   static async editCategory(req, res, next) {
-    let { id } = req.params;
-    let { name } = req.body;
+    let { name } = req.params;
+    let { name2 } = req.body;
+
     try {
       let newCategory = {
-        name,
+        name: name2,
       };
+
       const updating = await Category.update(newCategory, {
         where: {
-          id,
+          name,
         },
       });
 
-      const category = await Category.findByPk(id);
-      res.status(200).json({ category, msg: "Category edited successfully" });
+      const category = await Category.findOne({
+        where: {
+          name: name2,
+        },
+      });
+
+      res.status(200).json({ msg: "Category edited successfully", category });
     } catch (err) {
       next(err);
     }
   }
 
   static async deleteCategory(req, res, next) {
-    let { id } = req.params;
+    let { name } = req.params;
     try {
       const category = await Category.destroy({
         where: {
-          id,
+          name,
         },
       });
-      res.status(200).json({ msg: "Category deleted successfully" });
+
+      res.status(200).json({ msg: "Category deleted successfully", category });
     } catch (err) {
       next(err);
     }

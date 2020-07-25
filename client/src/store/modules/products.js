@@ -1,5 +1,5 @@
 import Axios from "axios";
-let baseUrl = "https://e-cms-wyrdhn.herokuapp.com";
+let baseUrl = "http://localhost:3000";
 
 const state = {
   products: [],
@@ -11,7 +11,7 @@ const actions = {
   fetchProducts: ({ commit }, payload) => {
     return new Promise((resolve, reject) => {
       Axios({
-        url: `https://e-cms-wyrdhn.herokuapp.com/products`,
+        url: `http://localhost:3000/products`,
         headers: {
           access_token: localStorage.access_token,
         },
@@ -29,7 +29,7 @@ const actions = {
   AddProduct: ({ commit }, payload) => {
     return new Promise((resolve, reject) => {
       Axios({
-        url: "https://e-cms-wyrdhn.herokuapp.com/products",
+        url: "http://localhost:3000/products",
         method: "post",
         data: payload,
         headers: {
@@ -48,7 +48,7 @@ const actions = {
   editProduct: ({ commit }, payload) => {
     return new Promise((resolve, reject) => {
       Axios({
-        url: `https://e-cms-wyrdhn.herokuapp.com/products/${payload.id}`,
+        url: `http://localhost:3000/products/${payload.id}`,
         method: "put",
         data: {
           name: payload.name,
@@ -73,7 +73,7 @@ const actions = {
   DeleteProduct: ({ commit }, payload) => {
     return new Promise((resolve, reject) => {
       Axios({
-        url: `https://e-cms-wyrdhn.herokuapp.com/products/${payload}`,
+        url: `http://localhost:3000/products/${payload}`,
         method: "delete",
         headers: {
           access_token: localStorage.access_token,

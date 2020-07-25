@@ -14,12 +14,17 @@ async function authorProduct(req, res, next) {
 }
 
 async function authorCategory(req, res, next) {
-  let { id } = req.params;
+  let { name } = req.params;
   let { role } = req.data;
+
   try {
-    const category = await Category.findByPk(id);
+    const category = await Category.findOne({
+      where: {
+        name,
+      },
+    });
     if (!category) throw { status: 400, msg: "Category not found" };
-    else if (role == "admin") next();
+    else if (role === "admin") next();
     else throw { status: 403, msg: "Unauthorized" };
   } catch (err) {
     next(err);
