@@ -10,7 +10,7 @@ const actions = {
   fetchCategories: ({ commit }) => {
     return new Promise((resolve, reject) => {
       Axios({
-        url: "http://localhost:3000/categories",
+        url: "https://e-cms-wyrdhn.herokuapp.com/categories",
         method: "get",
         headers: {
           access_token: localStorage.access_token,
@@ -29,7 +29,7 @@ const actions = {
   AddCategory: ({ commit }, payload) => {
     return new Promise((resolve, reject) => {
       Axios({
-        url: "http://localhost:3000/categories",
+        url: "https://e-cms-wyrdhn.herokuapp.com/categories",
         method: "post",
         data: payload,
         headers: {
@@ -48,7 +48,7 @@ const actions = {
   DeleteCategory: ({ commit }, payload) => {
     return new Promise((resolve, reject) => {
       Axios({
-        url: `http://localhost:3000/categories/${payload}`,
+        url: `https://e-cms-wyrdhn.herokuapp.com/categories/${payload}`,
         method: "delete",
         headers: {
           access_token: localStorage.access_token,
@@ -67,7 +67,7 @@ const actions = {
     console.log(payload);
     return new Promise((resolve, reject) => {
       Axios({
-        url: `http://localhost:3000/categories/${payload.name}`,
+        url: `https://e-cms-wyrdhn.herokuapp.com/categories/${payload.name}`,
         method: "put",
         data: {
           name2: payload.name2,
